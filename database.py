@@ -51,6 +51,7 @@ class Database:
                 lst.append(dict(r))
         self.db.append(Table(filename, lst))
 
+# add in code for a Database class
 
 # add in code for a Table class
 class Table:
