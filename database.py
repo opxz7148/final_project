@@ -20,7 +20,7 @@ class Database:
         :param table: Table object
         """
         if isinstance(table, Table):
-            self.db = dict
+            self.db.append(table)
         else:
             raise ValueError("Table to insert in to be instance of Table class")
 
@@ -49,7 +49,7 @@ class Database:
             rows = csv.DictReader(f)
             for r in rows:
                 lst.append(dict(r))
-        self.db.append(Table(filename, lst))
+        self.insert_table(Table(filename, lst))
 
 # add in code for a Database class
 
@@ -139,10 +139,10 @@ class Table:
         print(*self.table, sep="\n")
 
 
-mydb = Database("db1")
-mydb.add_csv_table("persons.csv")
-person_table = mydb.search("persons.csv")
-person_table.print_table()
-person_table.insert({'ID': '111111', 'fist': 'Ohm', 'last': 'S.', 'type': 'student'})
-person_table.print_table()
-
+# mydb = Database("db1")
+# mydb.add_csv_table("persons.csv")
+# person_table = mydb.search("persons.csv")
+# person_table.print_table()
+# person_table.insert({'ID': '111111', 'fist': 'Ohm', 'last': 'S.', 'type': 'student'})
+# person_table.print_table()
+#
