@@ -1,7 +1,7 @@
 # BEGIN part 1
 
 # import database module
-
+from database import Database, Table
 # define a funcion called initializing
 
 def initializing():

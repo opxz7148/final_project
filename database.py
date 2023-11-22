@@ -6,16 +6,14 @@ import copy
 
 # add in code for a Database class
 class Database:
-    # Construct database class by setting database name an create db list to contain table in the future
     def __init__(self, name):
         """
-        Construct database class by setting database name an create db list to contain table in the future
+        Construct database class by setting database name and create db list to contain table in the future
         :param name: Name of the database
         """
         self.name = name
         self.db = []
 
-    # Method to insert new data table into database
     def insert_table(self, table):
         """
         function to insert new data table into database.
@@ -28,7 +26,7 @@ class Database:
 
     def search(self, table_name):
         """
-        funtion to find certain table in database
+        funtion to find certain table in database by name of table
         :param table_name: name of table that user want to search.
         :return: Table instance or none
         """
@@ -133,13 +131,17 @@ class Table:
                 temps.append(item1[aggregation_key])
         return function(temps)
 
+    def print_table(self):
+        """
+        Function too print out table with easy to read format.
+        """
+        print(*self.table, sep="\n")
 
-# modify the code in the Table class so that it supports the insert operation where an entry can be added to a list of dictionary
+
 mydb = Database("db1")
 mydb.add_csv_table("persons.csv")
 person_table = mydb.search("persons.csv")
-print(*person_table.table, sep="\n")
-print()
+person_table.print_table()
 person_table.insert({'ID': '111111', 'fist': 'Ohm', 'last': 'S.', 'type': 'student'})
-print(*person_table.table, sep="\n")
+person_table.print_table()
 
