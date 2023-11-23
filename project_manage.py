@@ -1,5 +1,6 @@
 # import database module
 from database import Database, Table
+import csv
 # define a funcion called initializing
 
 # Initialize database for collect information
@@ -46,7 +47,9 @@ def login():
 
 # define a function called exit
 def exit():
-    pass
+    # Write person file
+    print(db1.search("persons.csv").table[0])
+    write_csv("persons.csv", list(db1.search("persons.csv").table[0].keys()), db1.search("persons.csv").table)
 
 # here are things to do in this function:
    # write out all the tables that have been modified to the corresponding csv files
@@ -54,12 +57,27 @@ def exit():
    
    # https://www.pythonforbeginners.com/basics/list-of-dictionaries-to-csv-in-python
 
+def write_csv(filename, listofhead, listofdict):
+    file = open(filename, 'w')
+    writer = csv.DictWriter(file, fieldnames=listofhead)
+    writer.writeheader()
+    writer.writerows(listofdict)
+    file.close()
+
 
 # make calls to the initializing and login functions defined above
 
 initializing()
-val = login()
-print(val)
+# val = login()
+# print(val)
+print(db1.db)
+db1.search("persons.csv").insert({
+        "ID": "6610545",
+        "first": "Pasu",
+        "Last": "sa",
+        "type": "student"
+    }
+)
 
 
 # based on the return value for login, activate the code that performs activities according to the role defined for that person_id
