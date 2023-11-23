@@ -1,9 +1,7 @@
 Final project proposal
-    In this final project I need to implement a program to manage project for student and faculty member, which I need
-to manage relationship of each role in faculty. Each role have different action to take. From this situation I decide to
-create each role as a class. Each class contain information of each user like their name and ID that will use in further
-method. In each class will have method of each role's action that able to call for perform an action. In each action 
-will effect some table in some way. After user properly login, my program will create new object of it own role's class.
-In every role class will have common method which is menu to let user to choose their action to perform in each session.
-After finish every session program will all exit function to record every change in this session and write into csv
-file.
+----------------------
+
+<p>In this final project I need to implement a program to manage project for student and faculty member, which I need to manage relationship of each role in faculty. Each role have different action to take. From this situation I decide to create each role as a class. Each class contain information of each user like their name and ID that will use in further method. In each class will have method of each role's action that able to call for perform an action. In each action will effect some table in some way. After user properly login, my program will create new object of it own role's class. In every role class will have common method which is menu to let user to choose their action to perform in each session. After finish every session program will all exit function to record every change in this session and write into csv file. </p>
+    
+
+<p>For project evaluation part I will create 2 new table which is waiting for approve & waiting for Evaluate table. This table will get updated when lead student choose to request an approve from advisor or request evaluation from faculty member. If lead student want to request an approve on their project proposal this will add new information into approve table and only their advisor will able to approve or feedback. After They got approve from advisor and finished their report lead student are able to request evaluation from faculty member which every faculty member need to approve or feedback that project. After project report got evaluate and approve from every faculty member that project will considered complete.</p>

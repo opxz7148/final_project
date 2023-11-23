@@ -1,29 +1,68 @@
-Todo list of final project
+# **Todo list of final project**
 
-General 
-- Implement project table class to store information for each project.
-- Implement member request pending table. To keep track of each invitation and make other student able to view their own invitation to project.
-- Implement advisor request pending table. work same as member request pending table but for faculty member.
-- Implement login table to collect information of each user information that require for login.
+## **General** 
+  - Implement project table class to store information for each project.
+  - Implement member request pending table. To keep track of each invitation and make other student able to view their own invitation to project.
+  - Implement advisor request pending table. work same as member request pending table but for faculty member.
+  - Implement login table to collect information of each user information that require for login.
+  - Implement Approve request table to keep track approve status for each project
+  - Implement Approve request table to keep track evaluate status for each project
 
-Each role action outline 
 
-A student
-    - Able to get an invitation from lead student to join a project then accept and change row to member student or decline invitation.
-    - Start their own project to become lead student.
+## **Each role todo list**
 
-Lead student
-    - Able to sent invitation to other student in a database who has a student role, But lead student can have only 1 pending invitation.
-    - After sent an invitation lead student are able to view a responded of other student.
-    - Sent request to faculty member to be their project advisor.
+  - In every class will have common method which is menu method to let user choose which action they will perform
+  
+  - ### ***student***
+    - Implement student class to store action that student can perform. In student class will contain the following
+      * *Attribute*
+        - Username
+        - User's ID
+      * *Method*
+        - View invitation for lead student and able to accept or deny invitation.
+        - Start a project and turn into Lead student.
 
-Member
-    - Able to view and modified project status in project table.
+  - ### ***Lead student***
+    - Implement lead student class to store action that lead student can perform. In student lead class will contain the following
+      * *Attribute*
+        - Username
+        - User's ID
+        - Project name
+      * *Method*
+        - Sent invitation to other student to join their group which. They can have only one pending invitation at the same time. Student who got invited must responded before lead student invite another student. In their group they're allowed to have at most 3 member which is 1 lead and 2 member.
+        - Sent invitation to faculty member to be their advisor.
+        - See and modified their own project.
+        - Submit project proposal to let their advisor approve.
+        - Submit their project report to let faculty member evaluate.
+        - Approve member leave request.
 
-faculty
-    - Able to view advisee request and choose to accept and change role to advisor or not.
+  - ### ***Member***
+    - Implement member class to store action that member can perform. In member class will contain the following
+      * *Attribute*
+        - Username
+        - User's ID
+        - Project name
+      * *Method*
+        - View and modified their project.
+        - Leave group
 
-Advisor
-    - View and edit project.
-    - Approve project proposal.
-    - Evaluate and apprrove project report
+  - ### ***Faculty member***
+    - Implement member class to store action that faculty member can perform. In faculty member class will contain the following
+      * *Attribute*
+        - Username
+        - User's ID
+      * *Method*
+        - View and respond advisor request. One faculty member may have multiple advisee
+        - See detail of all project
+        - Evaluate project report and choose to approve or feedback project.
+        
+  - ### ***Advisor***
+    - Implement Advisor class to store action that Advisor can perform. In Advisor class will contain the following
+        * *Attribute*
+          - Username
+          - User's ID
+          - Advisee project
+        * *Method*
+          - View their advisee project.
+          - View a proposal approve request from their advisee and choose to approve or feedback
+          - Evaluate project report and choose to approve or feedback project.
