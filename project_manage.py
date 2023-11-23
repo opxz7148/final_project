@@ -12,15 +12,17 @@ def initializing():
     # create all the corresponding tables for those csv files
     db1.add_csv_table("persons.csv")
     db1.add_csv_table("login.csv")
+    db1.add_csv_table("project.csv")
+    db1.add_csv_table("pending_advisor.csv")
+    db1.add_csv_table("pending_member.csv")
+    db1.add_csv_table("pending_approve.csv")
+    db1.add_csv_table("pending_eval.csv")
 
     # see the guide how many tables are needed
     # add all these tables to the database
-    db1.insert_table(Table("Project", []))
-    db1.insert_table(Table("Advisor_pending_request", []))
-    db1.insert_table(Table("Member_pending_request", []))
 
 
-# define a funcion called login
+# define a function called login
 def login():
 
     # ask a user for a username and password
@@ -58,6 +60,7 @@ def exit():
 initializing()
 val = login()
 print(val)
+
 
 # based on the return value for login, activate the code that performs activities according to the role defined for that person_id
 

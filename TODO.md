@@ -6,7 +6,7 @@
   - Implement advisor request pending table. work same as member request pending table but for faculty member.
   - Implement login table to collect information of each user information that require for login.
   - Implement Approve request table to keep track approve status for each project
-  - Implement Approve request table to keep track evaluate status for each project
+  - Implement evaluate request table to keep track evaluate status for each project
 
 
 ## **Each role todo list**
