@@ -34,3 +34,19 @@ def write_csv(filename, listofhead, listofdict):
     writer.writerows(listofdict)
     file.close()
 
+
+def get_int(msg):
+
+    while True:
+        result = input(msg)
+        try:
+            result = int(result)
+        except ValueError:
+            continue
+
+        return result
+
+
+def get_str(msg):
+    return input(msg)
+
