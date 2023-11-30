@@ -33,6 +33,7 @@ class Database:
         for table in self.db:
             if table.table_name == table_name:
                 return table
+        print("Table not found.")
         return None
 
     def add_csv_table(self, filename):

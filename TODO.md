@@ -63,6 +63,17 @@
           - User's ID
           - Advisee project
         * *Method*
-          - View their advisee project.
+          - View and modified their advisee project.
+          - View a proposal approve request from their advisee and choose to approve or feedback
+          - Evaluate project report and choose to approve or feedback project.
+
+  - ### ***Admin***
+    - Implement Advisor class to store action that Advisor can perform. In Advisor class will contain the following
+        * *Attribute*
+          - Username
+          - User's ID
+          - Advisee project
+        * *Method*
+          - View and modified their advisee project.
           - View a proposal approve request from their advisee and choose to approve or feedback
           - Evaluate project report and choose to approve or feedback project.

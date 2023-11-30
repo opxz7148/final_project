@@ -1,5 +1,6 @@
 # import database module
 from database import Database, Table
+from helper import login, write_csv
 import csv
 # define a funcion called initializing
 
@@ -7,10 +8,7 @@ import csv
 db1 = Database("db1")
 def initializing():
 
-# here are things to do in this function:
-
-    # create an object to read all csv files that will serve as a persistent state for this program
-    # create all the corresponding tables for those csv files
+    # Add all necessary table from csv file
     db1.add_csv_table("persons.csv")
     db1.add_csv_table("login.csv")
     db1.add_csv_table("project.csv")
@@ -19,58 +17,30 @@ def initializing():
     db1.add_csv_table("pending_approve.csv")
     db1.add_csv_table("pending_eval.csv")
 
-    # see the guide how many tables are needed
-    # add all these tables to the database
-
-
-# define a function called login
-def login():
-
-    # ask a user for a username and password
-    username = input("Username: ")
-    password = input("Password: ")
-
-    # Check that username and password are exist or not.
-    login_table = db1.search("login.csv").table
-    for user in login_table:
-        if username == user["username"]:
-            if user["password"] == password:
-                # returns [ID, role] if valid
-                return [user["ID"], user["role"]]
-            else:
-                # otherwise returning None
-                print("Password incorrect")
-                return None
-    return None
 
 
 
 # define a function called exit
 def exit():
-    pass
-    # Write person file
+
+    # Write each table back to csv file to update new information for each session.
     write_csv("persons.csv", list(db1.search("persons.csv").table[0].keys()), db1.search("persons.csv").table)
-
-# here are things to do in this function:
-   # write out all the tables that have been modified to the corresponding csv files
-   # By now, you know how to read in a csv file and transform it into a list of dictionaries. For this project, you also need to know how to do the reverse, i.e., writing out to a csv file given a list of dictionaries. See the link below for a tutorial on how to do this:
-   
-   # https://www.pythonforbeginners.com/basics/list-of-dictionaries-to-csv-in-python
-
-def write_csv(filename, listofhead, listofdict):
-    file = open(filename, 'w')
-    writer = csv.DictWriter(file, fieldnames=listofhead)
-    writer.writeheader()
-    writer.writerows(listofdict)
-    file.close()
+    write_csv("login.csv", list(db1.search("login.csv").table[0].keys()), db1.search("login.csv").table)
+    write_csv("project.csv", list(db1.search("project.csv").table[0].keys()), db1.search("project.csv").table)
+    write_csv("pending_advisor.csv", list(db1.search("pending_advisor.csv").table[0].keys()), db1.search("pending_advisor.csv").table)
+    write_csv("pending_member.csv", list(db1.search("pending_member.csv").table[0].keys()), db1.search("pending_member.csv").table)
+    write_csv("pending_approve.csv", list(db1.search("pending_approve.csv").table[0].keys()), db1.search("pending_approve.csv").table)
+    write_csv("pending_eval.csv", list(db1.search("pending_eval.csv").table[0].keys()), db1.search("pending_eval.csv").table)
 
 
 # make calls to the initializing and login functions defined above
-
 initializing()
-# val = login()
-# print(val)
 
+
+db1.search("login.csv").print_table()
+# val = login(db1)
+# print(val)
+#
 
 # based on the return value for login, activate the code that performs activities according to the role defined for that person_id
 
