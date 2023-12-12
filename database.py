@@ -137,8 +137,31 @@ class Table:
         """
         Function too print out table with easy to read format.
         """
-        print(*self.table, sep="\n")
+        key_ls = list(self.table[0].keys())
+        column_size = 20
+        table_size = (column_size * len(key_ls) + len(key_ls) + 1)
+        print("-" * table_size)
 
+        print(f"| {'Table name : ' + self.table_name:^}", end="")
+        print(" " * (table_size - len('| Table name:' + self.table_name) - 4), end="")
+        print("|")
+
+        print("-" * table_size)
+
+        print("|", end="")
+
+        for key in list(self.table[0].keys()):
+            print(f"{key:^20}", end="|")
+        print()
+
+        for item in self.table:
+            print("-" * table_size)
+            print("|", end="")
+            for key in key_ls:
+                print(f"{item[key]:^20}", end="|")
+            print("")
+
+        print("-" * table_size)
 
 # mydb = Database("db1")
 # mydb.add_csv_table("persons.csv")
