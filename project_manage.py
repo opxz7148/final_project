@@ -1,11 +1,11 @@
 # import database module
 from database import Database, Table
 from helper import login, write_csv
-import csv
-# define a funcion called initializing
+from project_class import Student, Lead, Member
 
 # Initialize database for collect information
 db1 = Database("db1")
+
 def initializing():
 
     # Add all necessary table from csv file
@@ -18,9 +18,6 @@ def initializing():
     db1.add_csv_table("pending_eval.csv")
 
 
-
-
-# define a function called exit
 def exit():
 
     # Write each table back to csv file to update new information for each session.
@@ -33,20 +30,32 @@ def exit():
     write_csv("pending_eval.csv", list(db1.search("pending_eval.csv").table[0].keys()), db1.search("pending_eval.csv").table)
 
 
+
+
+
 # make calls to the initializing and login functions defined above
 initializing()
 
+val = login(db1)
+print(val)
 
-db1.search("login.csv").print_table()
-# val = login(db1)
-# print(val)
-#
+
 
 # based on the return value for login, activate the code that performs activities according to the role defined for that person_id
 
-# if val[1] = 'admin':
+if val[2] == "student":
+    user = Student(val[0], val[1], db1)
+    user.menu()
+elif val[2] == "lead":
+    user = Lead(val[0], val[1], db1)
+    user.menu()
+elif val[2] == "member":
+    user = Member(val[0], val[1], db1)
+    user.menu()
+
+# if val[1] == 'admin':
     # see and do admin related activities
-# elif val[1] = 'student':
+# elif val[1] == 'student':
     # see and do student related activities
 # elif val[1] = 'member':
     # see and do member related activities

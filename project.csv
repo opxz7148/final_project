@@ -1,2 +1,3 @@
-name,lead,member,advisor,status,approve_count
-dummy,dummy,dummy/dummy,dummy,dummy,
+name,detail,lead,member,member_count,advisor,proposal,report,status,approval
+ Just minesweeper,Just mine sweeper,1111111,5662557/none,1,none,TODO,TODO,Writing proposal,none
+helloworld.exe,say hello to everyone,9898118,none/none,1,none,TODO,TODO,Writing proposal,none

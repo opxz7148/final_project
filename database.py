@@ -106,13 +106,17 @@ class Table:
 
         return joined_table
 
-    def filter(self, condition):
+    def filter(self, condition, new_name=""):
         """
         Function to filter table with certain condition
         :param condition: Condition that user want to filter as a lambda function
         :return: New table instance that already filtered.
         """
-        filtered_table = Table(self.table_name + '_filtered', [])
+        if new_name == "":
+            filtered_table = Table(self.table_name + '_filtered', [])
+        else:
+            filtered_table = Table(new_name, [])
+
         for item1 in self.table:
             if condition(item1):
                 filtered_table.table.append(item1)
@@ -133,24 +137,28 @@ class Table:
                 temps.append(item1[aggregation_key])
         return function(temps)
 
-    def print_table(self):
+    def print_table(self, exclude_key=""):
         """
         Function too print out table with easy to read format.
         """
-        key_ls = list(self.table[0].keys())
+        key_ls = []
+        for key in list(self.table[0].keys()):
+            if key not in exclude_key:
+                key_ls.append(key)
+
         column_size = 20
         table_size = (column_size * len(key_ls) + len(key_ls) + 1)
         print("-" * table_size)
 
         print(f"| {'Table name : ' + self.table_name:^}", end="")
-        print(" " * (table_size - len('| Table name:' + self.table_name) - 4), end="")
+        print(" " * (table_size - len('| Table name:' + self.table_name) - 3), end="")
         print("|")
 
         print("-" * table_size)
 
         print("|", end="")
 
-        for key in list(self.table[0].keys()):
+        for key in key_ls:
             print(f"{key:^20}", end="|")
         print()
 

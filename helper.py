@@ -53,23 +53,22 @@ def get_str(msg):
 
     while True:
         result = input(msg)
-        try:
-            result = int(result)
-        except ValueError:
-            if result.strip() == "":
-                continue
-            return result
-
-        continue
+        if result.strip() == "":
+            continue
+        return result
 
 
-def print_get_choice(choice_lst):
+def print_get_choice(choice_lst,exit_choice="Exit"):
 
     print("")
     for choice in range(len(choice_lst)):
         print(f"    [{choice + 1}] {choice_lst[choice]}")
+    print(f"    [0] {exit_choice}")
     print("")
 
-    ans = get_int("Select your action: ", 1, len(choice_lst))
+    ans = get_int("Select your action: ", 0, len(choice_lst))
     return ans
+
+def wait_for_enter():
+    input("Press enter to continue")
 
