@@ -2,22 +2,24 @@ import csv
 
 def login(db):
 
-    # ask a user for a username and password
-    username = input("Username: ")
-    password = input("Password: ")
+    while True:
+        # ask a user for a username and password
+        username = input("Username: ")
 
-    # Check that username and password are exist or not.
-    login_table = db.search("login.csv").table
-    for user in login_table:
-        if username == user["username"]:
-            if user["password"] == password:
-                # returns [ID, role] if valid
-                return [user["username"], user["ID"], user["role"]]
-            else:
-                # otherwise returning None
-                print("Password incorrect")
-                return None
-    return None
+        # Check that username and password are exist or not.
+        login_table = db.search("login.csv").table
+        for user in login_table:
+            if username == user["username"]:
+                password = input("Password: ")
+                if user["password"] == password:
+                    # returns [ID, role] if valid
+                    return [user["username"], user["ID"], user["role"]]
+                else:
+                    # otherwise returning None
+                    print("Password incorrect")
+                    continue
+        print("Username Invalid")
+        continue
 
 def write_csv(filename, listofhead, listofdict):
 

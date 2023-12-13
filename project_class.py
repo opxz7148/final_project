@@ -252,8 +252,62 @@ class Lead:
             wait_for_enter()
 
     def __invite_advisor(self):
-        #TODO
-        pass
+
+        if self.project["advisor"] != "none":
+            print("You already have advisor")
+            wait_for_enter()
+            return
+
+        # Prepare table from database for further action
+        pending_advisor_table = self.db.search('pending_advisor.csv')
+        login_table = self.db.search('login.csv')
+
+        if len(pending_advisor_table.filter(lambda invitation: invitation['lead'] == self.id and invitation['status'] == 'pending').table) != 0:
+
+            # Show invitation if there are pending invitation
+            pending_advisor_table.filter(lambda invitation: invitation['lead'] == self.id and invitation['status'] == 'pending', new_name="Pending member").print_table()
+            wait_for_enter()
+
+        else:
+
+            # Show table of student who isn't a member in any project if there are no pending invitation
+            login_table.filter(lambda person: person["role"] == "faculty" or person["role"] == "advisor", new_name="Faculty member list" ).print_table(exclude_key=['password'])
+
+            # Let user input id of student that they want to invite
+            invite_done = False
+            while True:
+
+                if invite_done:
+                    break
+
+                # Prompt user for ID
+                id = get_str("Enter faculty member ID or type 0 to abort: ")
+
+                if id == '0':
+                    break
+
+                # Check is ID available
+                for person in login_table.table:
+                    if person['ID'] == id:
+                        print(f"Invite {person['username']} ID: {person['ID']}.")
+                        ans = print_get_choice(["Confirm"], 'Cancel')
+                        if ans == 0:
+                            break
+                        if ans == 1:
+                            print("Sending invite")
+
+                            pending_advisor_table.insert(
+                                {
+                                    'lead': self.id,
+                                    'project': self.project['name'],
+                                    'pending_advisor': id,
+                                    'status': "pending"
+                                }
+                            )
+
+                            invite_done = True
+                            break
+            # Record new invitation to table
 
     def menu(self):
 
@@ -266,7 +320,7 @@ class Lead:
             elif choice == 2:
                 self.__invite_member()
             elif choice == 3:
-                pass
+                self.__invite_advisor()
             elif choice == 4:
                 self.__view_invitation_status()
             elif choice == 0:

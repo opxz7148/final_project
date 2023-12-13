@@ -61,7 +61,6 @@
         - User's ID
       * *Method*
         - View and respond advisor request. One faculty member may have multiple advisee
-        - See detail of all project
         - Evaluate project report and choose to approve or feedback project.
         
   - ### ***Advisor***
