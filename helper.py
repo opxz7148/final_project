@@ -37,6 +37,19 @@ def write_csv(filename, listofhead, listofdict):
     file.close()
 
 
+def record_change(db1):
+
+    # Write each table back to csv file to update new information for each session.
+    write_csv("persons.csv", list(db1.search("persons.csv").table[0].keys()), db1.search("persons.csv").table)
+    write_csv("login.csv", list(db1.search("login.csv").table[0].keys()), db1.search("login.csv").table)
+    write_csv("project.csv", list(db1.search("project.csv").table[0].keys()), db1.search("project.csv").table)
+    write_csv("pending_advisor.csv", list(db1.search("pending_advisor.csv").table[0].keys()), db1.search("pending_advisor.csv").table)
+    write_csv("pending_member.csv", list(db1.search("pending_member.csv").table[0].keys()), db1.search("pending_member.csv").table)
+    write_csv("pending_approve.csv", list(db1.search("pending_approve.csv").table[0].keys()), db1.search("pending_approve.csv").table)
+    write_csv("pending_eval.csv", list(db1.search("pending_eval.csv").table[0].keys()), db1.search("pending_eval.csv").table)
+
+
+
 def get_int(msg, start=0, stop=10000):
     in_range = list(range(start, stop+1))
     while True:
@@ -71,6 +84,9 @@ def print_get_choice(choice_lst,exit_choice="Exit"):
     ans = get_int("Select your action: ", 0, len(choice_lst))
     return ans
 
+
 def wait_for_enter():
-    input("Press enter to continue")
+    input("Press enter to continue: ")
+
+
 
