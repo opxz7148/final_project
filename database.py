@@ -137,20 +137,22 @@ class Table:
                 temps.append(item1[aggregation_key])
         return function(temps)
 
-    def print_table(self, exclude_key=""):
+    def print_table(self, exclude_key="", new_line_key=""):
         """
         Function too print out table with easy to read format.
         """
         key_ls = []
         for key in list(self.table[0].keys()):
-            if key not in exclude_key:
+            if key in exclude_key or key in new_line_key:
+                continue
+            else:
                 key_ls.append(key)
 
-        column_size = 20
+        column_size = 30
         table_size = (column_size * len(key_ls) + len(key_ls) + 1)
         print("-" * table_size)
 
-        print(f"| {'Table name : ' + self.table_name:^}", end="")
+        print(f"| {'Table name : ' + self.table_name:^30}", end="")
         print(" " * (table_size - len('| Table name:' + self.table_name) - 3), end="")
         print("|")
 
@@ -159,15 +161,23 @@ class Table:
         print("|", end="")
 
         for key in key_ls:
-            print(f"{key:^20}", end="|")
+            print(f"{key:^30}", end="|")
         print()
 
         for item in self.table:
+
             print("-" * table_size)
             print("|", end="")
             for key in key_ls:
-                print(f"{item[key]:^20}", end="|")
+                print(f"{item[key]:^30}", end="|")
             print("")
+
+            print("-" * table_size)
+            for new_line in new_line_key:
+                print(f"| {new_line}: {item[new_line]}", end="")
+                print(" " * (table_size - len(new_line) - len(item[new_line]) - 5), end="")
+                print("|")
+
 
         print("-" * table_size)
 

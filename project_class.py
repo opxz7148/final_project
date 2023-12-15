@@ -344,11 +344,74 @@ class Lead:
                             break
             # Record new invitation to table
 
+    def __view_request_history(self):
+
+        # Prepare necessary table for further action
+        pending_approve_table = self.db.search("pending_approve.csv")
+
+        # Get pending request to check are their any ongoing request
+        my_request = pending_approve_table.filter(lambda request: request['lead'] == self.id, new_name="Your request history")
+
+        if len(my_request.table) == 0:
+            print("You haven't sent any request")
+            wait_for_enter()
+        else:
+            my_request.print_table(new_line_key=["feedback"])
+            wait_for_enter()
+
+    def __ap_request(self, re_type):
+
+        # Prepare necessary table for further action
+        pending_approve_table = self.db.search("pending_approve.csv")
+
+        # Get pending request to check are their any ongoing request
+        if re_type == "proposal":
+            my_request = pending_approve_table.filter(lambda request : request['lead'] == self.id and
+                                                                       request['status'] == 'Proposal approve pending',
+                                                      new_name="Your Ongoing request")
+        else:
+            my_request = pending_approve_table.filter(lambda request : request['lead'] == self.id and
+                                                                       request['status'] == 'Report approve pending',
+                                                      new_name="Your Ongoing request")
+
+        if len(my_request.table) == 0:
+
+            # If there are no ongoing request
+            # Print project detail to let user check before sending request
+            self.__print_project()
+            wait_for_enter()
+
+            if re_type == "proposal":
+                choice = print_get_choice(['Confirm'], exit_choice="Cancel",
+                                          prompt="Confirm sending proposal approve request: ")
+            else:
+                choice = print_get_choice(['Confirm'], exit_choice="Cancel",
+                                          prompt="Confirm sending report approve request: ")
+
+            # If user tp cancel request go back to main menu
+            if choice == 0:
+                return
+            # If user confirm record log to table
+            elif choice == 1:
+                pending_approve_table.insert(
+                    {
+                        'lead': self.id,
+                        'project': self.project['name'],
+                        'advisor': self.project['advisor'],
+                        'feedback': 'None',
+                        'status': 'Report approve pending'
+                    }
+                )
+        else:
+            my_request.print_table(new_line_key=["feedback"])
+            wait_for_enter()
+
+
     def menu(self):
 
         while True:
 
-            choice = print_get_choice(['View project', 'Invite member', 'Invite Advisor', 'Member invitation status'])
+            choice = print_get_choice(['View project', 'Invite member', 'Invite Advisor', 'Member invitation status', 'Proposal Approve request','Report approve request', 'View request history'])
 
             if choice == 1:
                 self.__view_project()
@@ -358,6 +421,12 @@ class Lead:
                 self.__invite_advisor()
             elif choice == 4:
                 self.__view_invitation_status()
+            elif choice == 5:
+                self.__ap_request('proposal')
+            elif choice == 6:
+                self.__ap_request('report')
+            elif choice == 7:
+                self.__view_request_history()
             elif choice == 0:
                 break
 
@@ -609,8 +678,7 @@ class Advisor:
                 # Get list of project name
                 project_ls = [project['project'] for project in my_invitation.table]
 
-                print("Choose a project to join:")
-                choose_project = print_get_choice(project_ls, exit_choice="Cancel")
+                choose_project = print_get_choice(project_ls, exit_choice="Cancel", prompt="Choose a project to join:")
 
                 if choose_project == 0:
                     return
@@ -705,10 +773,77 @@ class Advisor:
                 if choice == 0:
                     break
 
+    def __approve_project(self, re_type):
+
+        # Prepare necessary table for further action
+        pending_approve_table = self.db.search("pending_approve.csv")
+
+        # Get pending request to check are their any ongoing request
+        if re_type == "proposal":
+            my_request = pending_approve_table.filter(lambda request : request['advisor'] == self.id and
+                                                                       request['status'] == 'Proposal approve pending',
+                                                      new_name="Your Ongoing request")
+        else:
+            my_request = pending_approve_table.filter(lambda request : request['advisor'] == self.id and
+                                                                       request['status'] == 'Report approve pending',
+                                                      new_name="Your Ongoing request")
+
+        # If don't have any ongoing request return to main menu.
+        if len(my_request.table) == 0:
+            print("There are no request right at this time")
+            wait_for_enter()
+            return
+
+        # Get list of project name
+        project_ls = [project['project'] for project in my_request.table]
+
+        while True:
+            # Prompt user which project to respond
+            choose_project = print_get_choice(project_ls, exit_choice="Cancel", prompt="Choose a project to join:")
+
+            # If user choose to cancel return back to menu
+            if choose_project == 0:
+                return
+
+            # Set choose project to a name of project instead of index
+            choose_project = project_ls[choose_project - 1]
+
+            # Find matching project name inside advisee attribute than set choose project to dict of project info instead.
+            for advising in self.advising:
+                if advising['name'] == choose_project:
+                    choose_project = advising
+                    break
+
+            # Let user select to approve or not
+            print_project(choose_project)
+            action = print_get_choice(["Approve", "Unapprove"],
+                                      exit_choice="Cancel",
+                                      prompt=f"Approve this project's {re_type}?: ")
+
+            if action == 0:
+                continue
+
+            feedback = get_str("Feedback: ")
+
+            for request in pending_approve_table.table:
+                if choose_project['lead'] == request['lead'] and request['status'] == "Proposal approve pending":
+                    right_request = request
+                    break
+
+            if action == 1:
+                choose_project["status"] = 'Writing Report'
+                right_request["status"] = 'Approve'
+                right_request["feedback"] = feedback
+                return
+            elif action == 2:
+                right_request["status"] = 'Unapprove'
+                right_request["feedback"] = feedback
+                return
+
     def menu(self):
         while True:
 
-            choice = print_get_choice(['View advisor request', 'View advising project', 'Evaluate Project'])
+            choice = print_get_choice(['View advisor request', 'View advising project','Approve proposal', 'Evaluate Project'])
 
             if choice == 0:
                 break
@@ -716,6 +851,9 @@ class Advisor:
                 self.__view_advisor_request()
             elif choice == 2:
                 self.__view_advising_project()
+            elif choice == 3:
+                self.__approve_project('proposal')
+
 
     @property
     def id(self):
