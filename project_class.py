@@ -1,4 +1,4 @@
-from helper import get_str, print_get_choice, wait_for_enter, record_change
+from helper import get_str, print_get_choice, wait_for_enter, record_change, print_project
 import sys
 
 
@@ -184,20 +184,7 @@ class Lead:
 
     def __print_project(self):
 
-        # Print project detail
-        # ==============================================#
-        print()
-        print(f"Project name: {self.project['name']}")
-        member = self.project['member'].split("/")
-        print(f"Member 1: {member[0]}")
-        print(f"Member 2: {member[1]}")
-        print(f"advisor: {self.project['advisor']}")
-        print(f"Detail: {self.project['detail']}")
-        print(f"Lead: {self.project['lead']}")
-        print(f"status: {self.project['status']}")
-        print(f"Proposal: {self.project['proposal']}")
-        print(f"Report: {self.project['report']}")
-        # ==============================================#
+        print_project(self.project)
 
     def __view_project(self):
 
@@ -404,32 +391,17 @@ class Member:
 
     def __print_project(self):
 
-        # Print project detail
-        # ==============================================#
-        print()
-        print(f"Project name: {self.project['name']}")
-        member = self.project['member'].split("/")
-        print(f"Member 1: {member[0]}")
-        print(f"Member 2: {member[1]}")
-        print(f"advisor: {self.project['advisor']}")
-        print(f"Detail: {self.project['detail']}")
-        print(f"Lead: {self.project['lead']}")
-        print(f"status: {self.project['status']}")
-        print(f"Proposal: {self.project['proposal']}")
-        print(f"Report: {self.project['report']}")
-        # ==============================================#
+        print_project(self.project)
 
     def __edit_project(self, choice):
 
         new = get_str("New information: ")
 
         if choice == 1:
-            self.project['name'] = new
-        elif choice == 2:
             self.project['detail'] = new
-        elif choice == 3:
+        elif choice == 2:
             self.project['proposal'] = new
-        elif choice == 4:
+        elif choice == 3:
             self.project['report'] = new
 
         self.__print_project()
@@ -605,6 +577,9 @@ class Advisor:
         self.__id = id
         self.__db = db
 
+        all_project = db.search('project.csv')
+        self.__advising = [project for project in all_project.table if project['advisor'] == self.id]
+
     def __view_advisor_request(self):
 
         # Get necessary table for further action
@@ -612,13 +587,13 @@ class Advisor:
         all_project = self.db.search('project.csv')
         login_table = self.db.search('login.csv')
 
-        if len(pending_advisor_table.filter(lambda invitation: invitation['pending_advisor'] == self.id and invitation[
-            'status'] == "Pending").table) != 0:
+        if len(pending_advisor_table.filter(lambda invitation: invitation['pending_advisor'] == self.id and invitation['status'] == "Pending").table) != 0:
 
             # Show invitation if there are pending invitation
             my_invitation = pending_advisor_table.filter(
                 lambda invitation: invitation['pending_advisor'] == self.id and invitation['status'] == "Pending",
-                new_name="Pending invitation")
+                new_name="Pending invitation"
+            )
             my_invitation.print_table()
 
             # Ask what user want to do.
@@ -690,15 +665,57 @@ class Advisor:
             print("There are no pending invitation right at this time.")
             wait_for_enter()
 
+    def __edit_project(self, choice, project):
+
+        new = get_str("New information: ")
+
+        if choice == 1:
+            project['detail'] = new
+        elif choice == 2:
+            project['proposal'] = new
+        elif choice == 3:
+            project['report'] = new
+
+        print_project(project)
+        wait_for_enter()
+
+    def __view_advising_project(self):
+
+        # Get list of project from attribute
+        project_ls = [project['name'] for project in self.advising]
+
+        while True:
+            choose_project = print_get_choice(project_ls, exit_choice="Cancel", prompt="Choose a project to advise:")
+
+            if choose_project == 0:
+                return
+
+            choose_project = self.advising[choose_project - 1]
+
+            print_project(choose_project)
+            wait_for_enter()
+
+            while True:
+
+                choice = print_get_choice(['Edit'])
+                if choice == 1:
+                    edit_choice = print_get_choice(['Detail', 'Proposal', 'Report'])
+                    if edit_choice != 0:
+                        self.__edit_project(edit_choice, choose_project)
+                if choice == 0:
+                    break
+
     def menu(self):
         while True:
 
-            choice = print_get_choice(['View advisor request', 'Respond advisor request', 'Evaluate Project'])
+            choice = print_get_choice(['View advisor request', 'View advising project', 'Evaluate Project'])
 
             if choice == 0:
                 break
             elif choice == 1:
                 self.__view_advisor_request()
+            elif choice == 2:
+                self.__view_advising_project()
 
     @property
     def id(self):
@@ -711,6 +728,10 @@ class Advisor:
     @property
     def db(self):
         return self.__db
+
+    @property
+    def advising(self):
+        return self.__advising
 
 
 

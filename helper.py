@@ -73,7 +73,7 @@ def get_str(msg):
         return result
 
 
-def print_get_choice(choice_lst,exit_choice="Exit"):
+def print_get_choice(choice_lst, exit_choice="Exit", prompt="Select your action: "):
 
     print("")
     for choice in range(len(choice_lst)):
@@ -81,12 +81,30 @@ def print_get_choice(choice_lst,exit_choice="Exit"):
     print(f"    [0] {exit_choice}")
     print("")
 
-    ans = get_int("Select your action: ", 0, len(choice_lst))
+    ans = get_int(prompt, 0, len(choice_lst))
     return ans
 
 
 def wait_for_enter():
     input("Press enter to continue: ")
+
+
+def print_project(project):
+    # Print project detail
+    # ==============================================#
+    print()
+    print(f"Project name: {project['name']}")
+    member = project['member'].split("/")
+    print(f"Member 1: {member[0]}")
+    print(f"Member 2: {member[1]}")
+    print(f"advisor: {project['advisor']}")
+    print(f"Detail: {project['detail']}")
+    print(f"Lead: {project['lead']}")
+    print(f"status: {project['status']}")
+    print(f"Proposal: {project['proposal']}")
+    print(f"Report: {project['report']}")
+    # ==============================================#
+
 
 
 
