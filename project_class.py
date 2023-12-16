@@ -307,13 +307,16 @@ class Lead:
     def __view_invitation_status(self):
 
         pending_member_table = self.db.search('pending_member.csv')
-        if len(pending_member_table.filter(lambda invitation: invitation['lead'] == self.id).table) != 0:
+        my_invitation = pending_member_table.filter(lambda invitation: invitation['lead'] == self.project['lead'])
+        if len(my_invitation.table) != 0:
 
             # Show invitation if there are pending invitation
-            pending_member_table.filter(
+            my_invitation.filter(
                 lambda invitation:
-                    invitation['lead'] == self.id,
-                new_name="Pending member").print_table()
+                    invitation['lead'] == self.project['lead'],
+                new_name="Pending member"
+            ).print_table()
+
             wait_for_enter()
 
         else:
@@ -708,8 +711,7 @@ class Member:
         self.__id = id
         self.__db = db
 
-        user_pro = db.search("project.csv").filter(lambda project: self.id in project["advisor"]).table[0]
-        print(user_pro)
+        user_pro = db.search("project.csv").filter(lambda project: self.id in project["member"]).table[0]
         self.__project = user_pro
 
     def __print_project(self):
@@ -745,15 +747,87 @@ class Member:
             if choice == 0:
                 break
 
+    def __view_proposal_approve_or_report_request(self, ap_type):
+
+        my_request = self.db.search('pending_approve.csv').filter(
+            lambda request:
+                request['lead'] == self.project['lead'] and
+                request['type'] == ap_type
+        )
+
+        if len(my_request.table) != 0:
+            my_request.print_table(exclude_key=['type'], new_line_key=["feedback"])
+            wait_for_enter()
+            return
+        else:
+            print(f"You haven't sent {ap_type} approve yet")
+
+    def __view_invitation_status(self):
+
+        pending_member_table = self.db.search('pending_member.csv')
+        my_invitation = pending_member_table.filter(lambda invitation: invitation['lead'] == self.project['lead'])
+        if len(my_invitation.table) != 0:
+
+            # Show invitation if there are pending invitation
+            my_invitation.filter(
+                lambda invitation:
+                    invitation['lead'] == self.project['lead'],
+                new_name="Pending member"
+            ).print_table()
+
+            wait_for_enter()
+
+        else:
+            print("There are no pending member right at this time.")
+            wait_for_enter()
+
+    def __eval_history(self):
+
+        pending_eval = self.db.search('pending_eval.csv')
+
+        eval_his = pending_eval.filter(lambda request: request['lead'] == self.project['lead'])
+
+        if len(eval_his.table) != 0:
+            eval_his.print_table(new_line_key=['feedback'])
+            wait_for_enter()
+        else:
+            print("No request history available")
+            wait_for_enter()
+        return
+
+    def __show_history(self):
+
+        while True:
+
+            choice = print_get_choice([
+                'Member invite history',
+                'Proposal approval request history',
+                'Evaluate History',
+                'Report approval request history'
+            ])
+
+            if choice == 0:
+                return
+            if choice == 1:
+                self.__view_invitation_status()
+            if choice == 2:
+                self.__view_proposal_approve_or_report_request("proposal")
+            if choice == 3:
+                self.__eval_history()
+            if choice == 4:
+                self.__view_proposal_approve_or_report_request("report")
+
     def menu(self):
         while True:
 
-            choice = print_get_choice(['View and edit project'])
+            choice = print_get_choice(['View and edit project', 'View history and status'])
 
             if choice == 0:
                 break
             elif choice == 1:
                 self.__view_project()
+            elif choice == 2:
+                self.__show_history()
 
     @property
     def id(self):
