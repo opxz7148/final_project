@@ -1,5 +1,5 @@
-lead,project,advisor,feedback,status
-1111111,Mine sweeper bro,8466074,Kak,Unapprove
-1111111,Mine sweeper bro,8466074,Yeah,Approve
-1111111,Mine sweeper bro,8466074,kak,Unapprove
-1111111,Mine sweeper bro,8466074,yay,Approve
+lead,project,advisor,feedback,status,type
+1111111,Mine sweeper bro,8466074,Kak,Unapprove,proposal
+1111111,Mine sweeper bro,8466074,Yeah,Approve,proposal
+1111111,Mine sweeper bro,8466074,kak,Unapprove,report
+1111111,Mine sweeper bro,8466074,yay,Approve,report

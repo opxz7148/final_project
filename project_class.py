@@ -33,8 +33,8 @@ class Student:
             "member": "none/none",
             "member_count": "1",
             "advisor": "none",
-            "proposal" : "TODO",
-            "report" : "TODO",
+            "proposal": "TODO",
+            "report": "TODO",
             "status": "Writing proposal",
             "approval": "none"
         })
@@ -62,10 +62,23 @@ class Student:
         all_project = self.db.search('project.csv')
         login_table = self.db.search('login.csv')
 
-        if len(pending_member_table.filter(lambda invitation: invitation['pending_member'] == self.id and invitation['status'] == "Pending").table) != 0:
+        if len(
+                pending_member_table.filter(
+                    lambda pending:
+                        pending['pending_member'] == self.id and
+                        pending['status'] == "Pending"
+                ).table
+               ) != 0:
 
             # Show invitation if there are pending invitation
-            my_invitation = pending_member_table.filter(lambda invitation: invitation['pending_member'] == self.id and invitation['status'] == "Pending", new_name="Pending invitation")
+
+            my_invitation = pending_member_table.filter(
+                lambda pending:
+                    pending['pending_member'] == self.id and
+                    pending['status'] == "Pending",
+                new_name="Pending invitation"
+            )
+
             my_invitation.print_table()
 
             # Ask what user want to do.
@@ -95,7 +108,6 @@ class Student:
                         invitation['status'] = "Decline"
                         if invitation['project'] == choose_project:
                             invitation['status'] = "Accept"
-
 
                 # Add member ID to project
                 for project in all_project.table:
@@ -151,8 +163,6 @@ class Student:
 
                 return
 
-
-
         else:
             print("There are no pending invitation right at this time.")
             wait_for_enter()
@@ -184,7 +194,7 @@ class Lead:
 
     def __print_project(self):
 
-        print_project(self.project)
+        print_project(self.project, self.db)
 
     def __view_project(self):
 
@@ -227,15 +237,28 @@ class Lead:
         pending_member_table = self.db.search('pending_member.csv')
         login_table = self.db.search('login.csv')
 
-        if len(pending_member_table.filter(lambda invitation: invitation['lead'] == self.id and invitation['status'] == 'pending').table) != 0:
+        if len(
+                pending_member_table.filter(
+                    lambda invitation:
+                        invitation['lead'] == self.id and
+                        invitation['status'] == 'pending'
+                ).table
+        ) != 0:
 
             # Show invitation if there are pending invitation
-            pending_member_table.filter(lambda invitation: invitation['lead'] == self.id and invitation['status'] == 'pending', new_name="Pending member").print_table()
+            pending_member_table.filter(
+                lambda invitation:
+                    invitation['lead'] == self.id and
+                    invitation['status'] == 'pending',
+                new_name="Pending member").print_table()
 
         else:
 
             # Show table of student who isn't a member in any project if there are no pending invitation
-            login_table.filter(lambda person: person["role"] == "student").print_table(exclude_key=['password'])
+            login_table.filter(
+                lambda able_person:
+                    able_person["role"] == "student"
+            ).print_table(exclude_key=['password'])
 
             # Let user input id of student that they want to invite
             invite_done = False
@@ -287,7 +310,10 @@ class Lead:
         if len(pending_member_table.filter(lambda invitation: invitation['lead'] == self.id).table) != 0:
 
             # Show invitation if there are pending invitation
-            pending_member_table.filter(lambda invitation: invitation['lead'] == self.id, new_name="Pending member").print_table()
+            pending_member_table.filter(
+                lambda invitation:
+                    invitation['lead'] == self.id,
+                new_name="Pending member").print_table()
             wait_for_enter()
 
         else:
@@ -305,16 +331,30 @@ class Lead:
         pending_advisor_table = self.db.search('pending_advisor.csv')
         login_table = self.db.search('login.csv')
 
-        if len(pending_advisor_table.filter(lambda invitation: invitation['lead'] == self.id and invitation['status'] == 'pending').table) != 0:
+        if len(
+                pending_advisor_table.filter(
+                    lambda invitation:
+                        invitation['lead'] == self.id and
+                        invitation['status'] == 'pending'
+                ).table
+        ) != 0:
 
             # Show invitation if there are pending invitation
-            pending_advisor_table.filter(lambda invitation: invitation['lead'] == self.id and invitation['status'] == 'pending', new_name="Pending member").print_table()
+            pending_advisor_table.filter(
+                lambda invitation:
+                    invitation['lead'] == self.id and
+                    invitation['status'] == 'pending',
+                new_name="Pending member").print_table()
             wait_for_enter()
 
         else:
 
             # Show table of student who isn't a member in any project if there are no pending invitation
-            login_table.filter(lambda person: person["role"] == "faculty" or person["role"] == "advisor", new_name="Faculty member list" ).print_table(exclude_key=['password'])
+            login_table.filter(
+                lambda able_person:
+                    able_person["role"] == "faculty" or
+                    person["role"] == "advisor",
+                new_name="Faculty member list").print_table(exclude_key=['password'])
 
             # Let user input id of student that they want to invite
             invite_done = False
@@ -367,7 +407,10 @@ class Lead:
         pending_approve_table = self.db.search("pending_approve.csv")
 
         # Get pending request to check are their any ongoing request
-        my_request = pending_approve_table.filter(lambda request: request['lead'] == self.id, new_name="Your request history")
+        my_request = pending_approve_table.filter(
+            lambda request:
+                request['lead'] == self.id,
+            new_name="Your request history")
 
         if len(my_request.table) == 0:
             print("You haven't sent any request")
@@ -389,9 +432,12 @@ class Lead:
                 wait_for_enter()
                 return
 
-            my_request = pending_approve_table.filter(lambda request : request['lead'] == self.id and
-                                                                       request['status'] == 'Proposal approve pending',
-                                                      new_name="Your Ongoing request")
+            my_request = pending_approve_table.filter(
+                lambda request:
+                    request['lead'] == self.id and
+                    request['status'] == 'Proposal approve pending',
+                new_name="Your Ongoing request")
+
         else:
 
             if self.project['status'] != 'Evaluated':
@@ -399,9 +445,11 @@ class Lead:
                 wait_for_enter()
                 return
 
-            my_request = pending_approve_table.filter(lambda request : request['lead'] == self.id and
-                                                                       request['status'] == 'Report approve pending',
-                                                      new_name="Your Ongoing request")
+            my_request = pending_approve_table.filter(
+                lambda request:
+                    request['lead'] == self.id and
+                    request['status'] == 'Report approve pending',
+                new_name="Your Ongoing request")
 
         if len(my_request.table) == 0:
 
@@ -428,7 +476,8 @@ class Lead:
                         'project': self.project['name'],
                         'advisor': self.project['advisor'],
                         'feedback': 'None',
-                        'status': 'Report approve pending'
+                        'status': 'Report approve pending',
+                        'type': re_type
                     }
                 )
         else:
@@ -439,13 +488,20 @@ class Lead:
 
         pending_eval = self.db.search('pending_eval.csv')
 
-        # If project not in writing report state user can't request a evaluate.
+        # If project not in writing report state user can't request an evaluate.
         if self.project["status"] == "Writing Report" or self.project['status'] == "Evaluated":
             pass
         else:
-            ongoing = pending_eval.filter(lambda request: request['lead'] == self.id and request['status'] == "Evaluate request pending")
+
+            ongoing = pending_eval.filter(
+                lambda request:
+                    request['lead'] == self.id and
+                    request['status'] == "Evaluate request pending"
+            )
+
             ongoing.print_table(new_line_key=['feedback'])
             wait_for_enter()
+
             return
 
         # Print project out to let user recheck before send a request
@@ -457,7 +513,16 @@ class Lead:
         person_table = self.db.search('persons.csv')
 
         # New joined table to show both username and real name
-        join_table = login_table.join(person_table, "ID").filter(lambda person: (person['role'] == 'faculty' or person['role'] == 'advisor') and person['ID'] != self.project['advisor'])
+        join_table = (login_table.join(person_table, "ID").filter(
+
+            lambda able_person:
+                (
+                    able_person['role'] == 'faculty' or
+                    able_person['role'] == 'advisor'
+                )
+                and able_person['ID'] != self.project['advisor'])
+
+        )
 
         # Print List of faculty member that able to evaluate project
         join_table.print_table(exclude_key=['password', 'type'])
@@ -487,7 +552,11 @@ class Lead:
                         break
 
                     # Check is selected person have a valid role or not
-                    if (person['role'] != 'advisor' and person['role'] != 'faculty') or person["ID"] == self.project['advisor']:
+                    if (
+                            (person['role'] != 'advisor' and person['role'] != 'faculty') or
+                            person["ID"] == self.project['advisor']
+                    ):
+
                         print(f"{person['username']} can't evaluated project")
                         break
 
@@ -521,22 +590,81 @@ class Lead:
 
         pending_eval = self.db.search('pending_eval.csv')
 
-        eval = pending_eval.filter(lambda request: request['lead'] == self.id)
+        eval_his = pending_eval.filter(lambda request: request['lead'] == self.id)
 
-        if len(eval.table) != 0:
-            eval.print_table(new_line_key=['feedback'])
+        if len(eval_his.table) != 0:
+            eval_his.print_table(new_line_key=['feedback'])
             wait_for_enter()
         else:
             print("No request history available")
             wait_for_enter()
         return
 
+    def __view_proposal_approve_request(self):
+
+        my_request = self.db.search('pending_approve.csv').filter(
+            lambda request:
+                request['lead'] == self.id and
+                request['type'] == 'proposal'
+        )
+
+        if len(my_request.table) != 0:
+            my_request.print_table(exclude_key=['type'])
+            wait_for_enter()
+            return
+        else:
+            print("You haven't sent proposal approve yet")
+
+    def __view_report_approve_request(self):
+        my_request = self.db.search('pending_approve.csv').filter(
+            lambda request:
+            request['lead'] == self.id and
+            request['type'] == 'report'
+        )
+        if len(my_request.table) != 0:
+            my_request.print_table(exclude_key=['type'])
+            wait_for_enter()
+            return
+        else:
+            print("You haven't sent report approve yet")
+
+    def __show_history(self):
+
+        while True:
+
+            choice = print_get_choice([
+                'Member invite history',
+                'Proposal approval request history',
+                'Evaluate History',
+                'Report approval request history'
+            ])
+
+            if choice == 0:
+                return
+            if choice == 1:
+                self.__view_invitation_status()
+            if choice == 2:
+                self.__view_proposal_approve_request()
+            if choice == 3:
+                self.__eval_history()
+            if choice == 4:
+                self.__view_report_approve_request()
+
     def menu(self):
 
         while True:
 
-            choice = print_get_choice(['View project', 'Invite member', 'Invite Advisor', 'Member invitation status', 'Proposal Approve request','Report approve request', 'View request history', 'Evaluate request', 'Evaluated history'])
+            choice = print_get_choice([
+                'View project',
+                'Invite member',
+                'Invite Advisor',
+                'Proposal Approve request',
+                'Report approve request',
+                'Evaluate request',
+                'View history'
+            ])
 
+            # 'Member invitation status', View request history' 'Evaluated history'
             if choice == 1:
                 self.__view_project()
             elif choice == 2:
@@ -544,17 +672,13 @@ class Lead:
             elif choice == 3:
                 self.__invite_advisor()
             elif choice == 4:
-                self.__view_invitation_status()
-            elif choice == 5:
                 self.__ap_request('proposal')
-            elif choice == 6:
+            elif choice == 5:
                 self.__ap_request('report')
-            elif choice == 7:
-                self.__view_request_history()
-            elif choice == 8:
+            elif choice == 6:
                 self.__eval_request()
-            elif choice == 9:
-                self.__eval_history()
+            elif choice == 7:
+                self.__show_history()
             elif choice == 0:
                 break
 
@@ -588,7 +712,7 @@ class Member:
 
     def __print_project(self):
 
-        print_project(self.project)
+        print_project(self.project, self.db)
 
     def __edit_project(self, choice):
 
@@ -660,10 +784,21 @@ class Faculty:
         all_project = self.db.search('project.csv')
         login_table = self.db.search('login.csv')
 
-        if len(pending_advisor_table.filter(lambda invitation: invitation['pending_advisor'] == self.id and invitation['status'] == "Pending").table) != 0:
+        if len(
+                pending_advisor_table.filter(
+                    lambda pending:
+                        pending['pending_advisor'] == self.id and
+                        pending['status'] == "Pending"
+                ).table
+        ) != 0:
 
             # Show invitation if there are pending invitation
-            my_invitation = pending_advisor_table.filter(lambda invitation: invitation['pending_advisor'] == self.id and invitation['status'] == "Pending", new_name="Pending invitation")
+            my_invitation = pending_advisor_table.filter(
+                lambda pending:
+                    pending['pending_advisor'] == self.id and
+                    pending['status'] == "Pending", new_name="Pending invitation"
+            )
+
             my_invitation.print_table()
 
             # Ask what user want to do.
@@ -691,7 +826,6 @@ class Faculty:
                 for invitation in pending_advisor_table.table:
                     if invitation['pending_advisor'] == self.id and invitation['project'] == choose_project:
                         invitation['status'] = "Accept"
-
 
                 # Add member ID to project
                 for project in all_project.table:
@@ -733,8 +867,6 @@ class Faculty:
 
                 return
 
-
-
         else:
             print("There are no pending invitation right at this time.")
             wait_for_enter()
@@ -744,9 +876,11 @@ class Faculty:
         pending_eval_table = self.db.search("pending_eval.csv")
         all_project = self.db.search("project.csv")
 
-        my_request = pending_eval_table.filter(lambda request: request['pending_committee'] == self.id and
-                                                                  request['status'] == 'Evaluate request pending',
-                                                  new_name="Your Ongoing request")
+        my_request = pending_eval_table.filter(
+            lambda request_log:
+                request_log['pending_committee'] == self.id and
+                request_log['status'] == 'Evaluate request pending',
+            new_name="Your Ongoing request")
 
         if len(my_request.table) == 0:
             print("There are no request right at this time")
@@ -775,7 +909,7 @@ class Faculty:
                     choose_project = project
 
             # Let user select to approve or not
-            print_project(choose_project)
+            print_project(choose_project, self.db)
             action = print_get_choice(["Approve", "Unapprove"],
                                       exit_choice="Cancel",
                                       prompt=f"Approve this project?: ")
@@ -825,7 +959,6 @@ class Faculty:
                 self.__eval()
                 pass
 
-
     @property
     def id(self):
         return self.__id
@@ -856,11 +989,19 @@ class Advisor:
         all_project = self.db.search('project.csv')
         login_table = self.db.search('login.csv')
 
-        if len(pending_advisor_table.filter(lambda invitation: invitation['pending_advisor'] == self.id and invitation['status'] == "Pending").table) != 0:
+        if len(
+                pending_advisor_table.filter(
+                    lambda pending:
+                        pending['pending_advisor'] == self.id and
+                        pending['status'] == "Pending"
+                ).table
+        ) != 0:
 
             # Show invitation if there are pending invitation
             my_invitation = pending_advisor_table.filter(
-                lambda invitation: invitation['pending_advisor'] == self.id and invitation['status'] == "Pending",
+                lambda pending:
+                    pending['pending_advisor'] == self.id and
+                    pending['status'] == "Pending",
                 new_name="Pending invitation"
             )
             my_invitation.print_table()
@@ -927,8 +1068,6 @@ class Advisor:
 
                 return
 
-
-
         else:
             print("There are no pending invitation right at this time.")
             wait_for_enter()
@@ -944,7 +1083,7 @@ class Advisor:
         elif choice == 3:
             project['report'] = new
 
-        print_project(project)
+        print_project(project, self.db)
         wait_for_enter()
 
     def __view_advising_project(self):
@@ -960,7 +1099,7 @@ class Advisor:
 
             choose_project = self.advising[choose_project - 1]
 
-            print_project(choose_project)
+            print_project(choose_project, self.db)
             wait_for_enter()
 
             while True:
@@ -980,15 +1119,23 @@ class Advisor:
 
         # Get pending request to check are their any ongoing request
         if re_type == "proposal":
-            my_request = pending_approve_table.filter(lambda request : request['advisor'] == self.id and
-                                                                       request['status'] == 'Proposal approve pending',
-                                                      new_name="Your Ongoing request")
-        else:
-            my_request = pending_approve_table.filter(lambda request : request['advisor'] == self.id and
-                                                                       request['status'] == 'Report approve pending',
-                                                      new_name="Your Ongoing request")
 
-        # If don't have any ongoing request return to main menu.
+            my_request = pending_approve_table.filter(
+                lambda request_log:
+                    request_log['advisor'] == self.id and
+                    request_log['status'] == 'Proposal approve pending',
+                new_name="Your Ongoing request")
+
+        else:
+
+            my_request = pending_approve_table.filter(
+                lambda request_log:
+                    request_log['advisor'] == self.id and
+                    request_log['status'] == 'Report approve pending',
+                new_name="Your Ongoing request"
+            )
+
+        # If advisor don't have any ongoing request return to main menu.
         if len(my_request.table) == 0:
             print("There are no request right at this time")
             wait_for_enter()
@@ -1001,7 +1148,11 @@ class Advisor:
 
         while True:
             # Prompt user which project to respond
-            choose_project = print_get_choice(project_ls, exit_choice="Cancel", prompt=f"Choose a {re_type} to approve:")
+            choose_project = print_get_choice(
+                project_ls,
+                exit_choice="Cancel",
+                prompt=f"Choose a {re_type} to approve:"
+            )
 
             # If user choose to cancel return back to menu
             if choose_project == 0:
@@ -1010,14 +1161,14 @@ class Advisor:
             # Set choose project to a name of project instead of index
             choose_project = project_ls[choose_project - 1]
 
-            # Find matching project name inside advisee attribute than set choose project to dict of project info instead.
+            # Find matching project name inside advisee attribute than set choose project to dict of project instead.
             for advising in self.advising:
                 if advising['name'] == choose_project:
                     choose_project = advising
                     break
 
             # Let user select to approve or not
-            print_project(choose_project)
+            print_project(choose_project, self.db)
             action = print_get_choice(["Approve", "Unapprove"],
                                       exit_choice="Cancel",
                                       prompt=f"Approve this project's {re_type}?: ")
@@ -1030,7 +1181,12 @@ class Advisor:
             right_request = {}
 
             for request in pending_approve_table.table:
-                if choose_project['lead'] == request['lead'] and request['status'] == f"{re_type.title()} approve pending":
+
+                if (
+                        choose_project['lead'] == request['lead'] and
+                        request['status'] == f"{re_type.title()} approve pending"
+                ):
+
                     right_request = request
                     break
 
@@ -1060,16 +1216,17 @@ class Advisor:
                 right_request["feedback"] = feedback
                 return
 
-
-
     def __eval(self):
         # Prepare necessary table for further action
         pending_eval_table = self.db.search("pending_eval.csv")
         all_project = self.db.search("project.csv")
 
-        my_request = pending_eval_table.filter(lambda request: request['pending_committee'] == self.id and
-                                                               request['status'] == 'Evaluate request pending',
-                                               new_name="Your Ongoing request")
+        my_request = pending_eval_table.filter(
+            lambda request_log:
+                request_log['pending_committee'] == self.id and
+                request_log['status'] == 'Evaluate request pending',
+            new_name="Your Ongoing request"
+        )
 
         if len(my_request.table) == 0:
             print("There are no request right at this time")
@@ -1098,7 +1255,7 @@ class Advisor:
                     choose_project = project
 
             # Let user select to approve or not
-            print_project(choose_project)
+            print_project(choose_project, self.db)
             action = print_get_choice(["Approve", "Unapprove"],
                                       exit_choice="Cancel",
                                       prompt=f"Approve this project?: ")
@@ -1138,7 +1295,13 @@ class Advisor:
     def menu(self):
         while True:
 
-            choice = print_get_choice(['View advisor request', 'View advising project', 'Approve proposal', 'Approve Report','Evaluate Project'])
+            choice = print_get_choice([
+                'View advisor request',
+                'View advising project',
+                'Approve proposal',
+                'Approve Report',
+                'Evaluate Project'
+            ])
 
             if choice == 0:
                 break
@@ -1152,7 +1315,6 @@ class Advisor:
                 self.__approve_project('report')
             elif choice == 5:
                 self.__eval()
-
 
     @property
     def id(self):

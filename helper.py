@@ -1,5 +1,6 @@
 import csv
 
+
 def login(db):
 
     while True:
@@ -21,6 +22,7 @@ def login(db):
         print("Username Invalid")
         continue
 
+
 def write_csv(filename, listofhead, listofdict):
 
     # Open file correspond to file name param.
@@ -40,14 +42,41 @@ def write_csv(filename, listofhead, listofdict):
 def record_change(db1):
 
     # Write each table back to csv file to update new information for each session.
-    write_csv("persons.csv", list(db1.search("persons.csv").table[0].keys()), db1.search("persons.csv").table)
-    write_csv("login.csv", list(db1.search("login.csv").table[0].keys()), db1.search("login.csv").table)
-    write_csv("project.csv", list(db1.search("project.csv").table[0].keys()), db1.search("project.csv").table)
-    write_csv("pending_advisor.csv", list(db1.search("pending_advisor.csv").table[0].keys()), db1.search("pending_advisor.csv").table)
-    write_csv("pending_member.csv", list(db1.search("pending_member.csv").table[0].keys()), db1.search("pending_member.csv").table)
-    write_csv("pending_approve.csv", list(db1.search("pending_approve.csv").table[0].keys()), db1.search("pending_approve.csv").table)
-    write_csv("pending_eval.csv", list(db1.search("pending_eval.csv").table[0].keys()), db1.search("pending_eval.csv").table)
-
+    write_csv(
+        "persons.csv",
+        list(db1.search("persons.csv").table[0].keys()),
+        db1.search("persons.csv").table
+    )
+    write_csv(
+        "login.csv",
+        list(db1.search("login.csv").table[0].keys()),
+        db1.search("login.csv").table
+    )
+    write_csv(
+        "project.csv",
+        list(db1.search("project.csv").table[0].keys()),
+        db1.search("project.csv").table
+    )
+    write_csv(
+        "pending_advisor.csv",
+        list(db1.search("pending_advisor.csv").table[0].keys()),
+        db1.search("pending_advisor.csv").table
+    )
+    write_csv(
+        "pending_member.csv",
+        list(db1.search("pending_member.csv").table[0].keys()),
+        db1.search("pending_member.csv").table
+    )
+    write_csv(
+        "pending_approve.csv",
+        list(db1.search("pending_approve.csv").table[0].keys()),
+        db1.search("pending_approve.csv").table
+    )
+    write_csv(
+        "pending_eval.csv",
+        list(db1.search("pending_eval.csv").table[0].keys()),
+        db1.search("pending_eval.csv").table
+    )
 
 
 def get_int(msg, start=0, stop=10000):
@@ -92,22 +121,32 @@ def wait_for_enter():
     input("Press enter to continue: ")
 
 
-def print_project(project):
+def print_project(project, db):
     # Print project detail
     print()
     print("=====================================================")
     print(f"Project name: {project['name']}")
+    print(f"Lead: {get_name(project['lead'], db)}")
     member = project['member'].split("/")
-    print(f"Member 1: {member[0]}")
-    print(f"Member 2: {member[1]}")
-    print(f"advisor: {project['advisor']}")
+    print(f"Member 1: {get_name(member[0], db)}")
+    print(f"Member 2: {get_name(member[1], db)}")
+    print(f"advisor: {get_name(project['advisor'], db)}")
     print(f"Detail: {project['detail']}")
-    print(f"Lead: {project['lead']}")
     print(f"status: {project['status']}")
     print(f"Proposal: {project['proposal']}")
     print(f"Report: {project['report']}")
+    if project['approval'] != 'none':
+        approval = project['approval'].split('/')
+        print("Evaluated by:")
+        for committee in approval:
+            print(f"{get_name(committee, db)}")
     print("=====================================================")
 
 
+def get_name(user_id, db):
 
+    person_table = db.search('persons.csv')
 
+    for person in person_table.table:
+        if person['ID'] == user_id:
+            return f"{person['first']} {person['Last']}"
