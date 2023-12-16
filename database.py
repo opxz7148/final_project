@@ -172,8 +172,8 @@ class Table:
                 print(f"{item[key]:^30}", end="|")
             print("")
 
-            print("-" * table_size)
             for new_line in new_line_key:
+                print("-" * table_size)
                 print(f"| {new_line}: {item[new_line]}", end="")
                 print(" " * (table_size - len(new_line) - len(item[new_line]) - 5), end="")
                 print("|")
