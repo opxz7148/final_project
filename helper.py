@@ -110,9 +110,8 @@ def print_get_choice(choice_lst, exit_choice="Exit", prompt="Select your action:
         print(f"    [{choice + 1}] {choice_lst[choice]}")
     print(f"    [0] {exit_choice}")
     print("=====================================================")
-    print()
-
     ans = get_int(prompt, 0, len(choice_lst))
+
     return ans
 
 
