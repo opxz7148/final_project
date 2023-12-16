@@ -8,18 +8,6 @@ class Student:
         self.__id = id
         self.__db = db
 
-    @property
-    def id(self):
-        return self.__id
-
-    @property
-    def username(self):
-        return self.__username
-
-    @property
-    def db(self):
-        return self.__db
-
     def __start_project(self):
         # Get information about project
         name = get_str("Project name: ")
@@ -179,6 +167,18 @@ class Student:
                 self.__accept_invite()
             elif choice == 0:
                 break
+
+    @property
+    def id(self):
+        return self.__id
+
+    @property
+    def username(self):
+        return self.__username
+
+    @property
+    def db(self):
+        return self.__db
 
 
 class Lead:
@@ -609,20 +609,22 @@ class Lead:
         )
 
         if len(my_request.table) != 0:
-            my_request.print_table(exclude_key=['type'])
+            my_request.print_table(exclude_key=['type'], new_line_key=["feedback"])
             wait_for_enter()
             return
         else:
             print("You haven't sent proposal approve yet")
 
     def __view_report_approve_request(self):
+
         my_request = self.db.search('pending_approve.csv').filter(
             lambda request:
             request['lead'] == self.id and
             request['type'] == 'report'
         )
+
         if len(my_request.table) != 0:
-            my_request.print_table(exclude_key=['type'])
+            my_request.print_table(exclude_key=['type'], new_line_key=["feedback"])
             wait_for_enter()
             return
         else:
