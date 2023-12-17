@@ -1440,8 +1440,8 @@ class Admin:
             print_project(project, self.db)
 
     def menu(self):
-
-        choice = print_get_choice(
+        while Trueซ
+            choice = print_get_choice(
             [
                 'Login table',
                 'Pending member invitation table',
@@ -1451,20 +1451,22 @@ class Admin:
                 'All project'
             ],
             prompt="Which table you want to view and insert: "
-        )
+            )
 
-        if choice == 1:
-            self.__view_and_insert_table("login.csv")
-        elif choice == 2:
-            self.__view_and_insert_table('pending_member.csv')
-        elif choice == 3:
-            self.__view_and_insert_table('pending_advisor.csv')
-        elif choice == 4:
-            self.__view_and_insert_table('pending_approve.csv')
-        elif choice == 5:
-            self.__view_and_insert_table('pending_eval.csv')
-        elif choice == 6:
-            self.__view_and_insert_table('project.csv')
+            if choice == 1:
+                self.__view_and_insert_table("login.csv")
+            elif choice == 2:
+                self.__view_and_insert_table('pending_member.csv')
+            elif choice == 3:
+                self.__view_and_insert_table('pending_advisor.csv')
+            elif choice == 4:
+                self.__view_and_insert_table('pending_approve.csv')
+            elif choice == 5:
+                self.__view_and_insert_table('pending_eval.csv')
+            elif choice == 6:
+                self.__view_and_insert_table('project.csv')
+            elif choice == 0:
+                break
 
 
     @property
