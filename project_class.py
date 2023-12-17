@@ -1440,17 +1440,17 @@ class Admin:
             print_project(project, self.db)
 
     def menu(self):
-        while Trueซ
+        while True:
             choice = print_get_choice(
-            [
-                'Login table',
-                'Pending member invitation table',
-                'Pending advisor invitation table',
-                'Pending approval table',
-                'Pending evaluate table',
-                'All project'
-            ],
-            prompt="Which table you want to view and insert: "
+                [
+                    'Login table',
+                    'Pending member invitation table',
+                    'Pending advisor invitation table',
+                    'Pending approval table',
+                    'Pending evaluate table',
+                    'All project'
+                ],
+                prompt="Which table you want to view and insert: "
             )
 
             if choice == 1:
@@ -1467,7 +1467,6 @@ class Admin:
                 self.__view_and_insert_table('project.csv')
             elif choice == 0:
                 break
-
 
     @property
     def id(self):
