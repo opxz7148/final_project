@@ -1,7 +1,7 @@
 # import database module
 from database import Database
 from helper import login, record_change, get_name, wait_for_enter
-from project_class import Student, Lead, Member, Faculty, Advisor
+from project_class import Student, Lead, Member, Faculty, Advisor, Admin
 
 # Initialize database for collect information
 db1 = Database("db1")
@@ -40,6 +40,8 @@ elif val[2] == "faculty":
     user = Faculty(val[0], val[1], db1)
 elif val[2] == "advisor":
     user = Advisor(val[0], val[1], db1)
+elif val[2] == "admin":
+    user = Admin(val[0], val[1], db1)
 
 user.menu()
 

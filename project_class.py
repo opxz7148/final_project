@@ -1396,10 +1396,51 @@ class Admin:
         self.__id = user_id
         self.__db = db
 
-    def __view_and_insert_login_table(self):
-        login_table = self.db.search('login.csv')
+    def __insert_table(self, table):
+        print("Input data for each collumn")
+        keys = list(table.table[0].keys())
+        temp = {}
+        for key in keys:
+            temp[key] = get_str(key + ": ")
+        table.insert(temp)
+
+    def __view_and_insert_table(self, filename):
+
+        choose_table = self.db.search(filename)
+
+        if len(choose_table.table) == 0:
+            print("No data available")
+            wait_for_enter()
+            return
+
+        if filename == 'project.csv':
+            self.__print_all_project()
+        else:
+            choose_table.print_table()
+
+        wait_for_enter()
+
+        while True:
+
+            choice = print_get_choice(['Edit'])
+            if choice == 1:
+                self.__insert_table(choose_table)
+            if choice == 0:
+                break
+
+    def __print_all_project(self):
+        all_project = self.db.search('project.csv')
+
+        if len(all_project.table) == 0:
+            print("No data available")
+            wait_for_enter()
+            return
+
+        for project in all_project.table:
+            print_project(project, self.db)
 
     def menu(self):
+
         choice = print_get_choice(
             [
                 'Login table',
@@ -1407,10 +1448,23 @@ class Admin:
                 'Pending advisor invitation table',
                 'Pending approval table',
                 'Pending evaluate table',
+                'All project'
             ],
             prompt="Which table you want to view and insert: "
         )
 
+        if choice == 1:
+            self.__view_and_insert_table("login.csv")
+        elif choice == 2:
+            self.__view_and_insert_table('pending_member.csv')
+        elif choice == 3:
+            self.__view_and_insert_table('pending_advisor.csv')
+        elif choice == 4:
+            self.__view_and_insert_table('pending_approve.csv')
+        elif choice == 5:
+            self.__view_and_insert_table('pending_eval.csv')
+        elif choice == 6:
+            self.__view_and_insert_table('project.csv')
 
 
     @property
