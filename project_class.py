@@ -82,8 +82,7 @@ class Student:
                 # Get list of project name
                 project_ls = [project['project'] for project in my_invitation.table]
 
-                print("Choose a project to join:")
-                choose_project = print_get_choice(project_ls, exit_choice="Cancel")
+                choose_project = print_get_choice(project_ls, exit_choice="Cancel", prompt="Which project to join: ")
 
                 if choose_project == 0:
                     return
@@ -136,7 +135,7 @@ class Student:
                 project_ls = [project['project'] for project in my_invitation.table]
 
                 print("Choose a invitation to decline:")
-                choose_project = print_get_choice(project_ls, exit_choice="Cancel")
+                choose_project = print_get_choice(project_ls, exit_choice="Cancel", prompt="Which project to decline: ")
 
                 if choose_project == 0:
                     return
@@ -479,7 +478,7 @@ class Lead:
                         'project': self.project['name'],
                         'advisor': self.project['advisor'],
                         'feedback': 'None',
-                        'status': 'Report approve pending',
+                        'status': f'{re_type.title()} approve pending',
                         'type': re_type
                     }
                 )
@@ -491,20 +490,23 @@ class Lead:
 
         pending_eval = self.db.search('pending_eval.csv')
 
-        # If project not in writing report state user can't request an evaluate.
+        # If project not in writing report state, user can't request an evaluate.
         if self.project["status"] == "Writing Report" or self.project['status'] == "Evaluated":
             pass
         else:
+            print("You can't send evaluate request at this time")
+            wait_for_enter()
+            return
 
-            ongoing = pending_eval.filter(
-                lambda request:
-                    request['lead'] == self.id and
-                    request['status'] == "Evaluate request pending"
-            )
+        ongoing = pending_eval.filter(
+            lambda request:
+            request['lead'] == self.id and
+            request['status'] == "Evaluate request pending"
+        )
 
+        if len(ongoing.table) != 0:
             ongoing.print_table(new_line_key=['feedback'])
             wait_for_enter()
-
             return
 
         # Print project out to let user recheck before send a request
@@ -632,6 +634,8 @@ class Lead:
             return
         else:
             print("You haven't sent report approve yet")
+            wait_for_enter()
+            return
 
     def __show_history(self):
 
@@ -642,7 +646,7 @@ class Lead:
                 'Proposal approval request history',
                 'Evaluate History',
                 'Report approval request history'
-            ])
+            ], prompt="Which history and status you want to view: ")
 
             if choice == 0:
                 return
@@ -804,7 +808,7 @@ class Member:
                 'Proposal approval request history',
                 'Evaluate History',
                 'Report approval request history'
-            ])
+            ], prompt="Which history and status you want to view")
 
             if choice == 0:
                 return
