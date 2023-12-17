@@ -3,9 +3,9 @@ import sys
 
 
 class Student:
-    def __init__(self, username, id, db):
+    def __init__(self, username, user_id, db):
         self.__username = username
-        self.__id = id
+        self.__id = user_id
         self.__db = db
 
     def __start_project(self):
@@ -181,10 +181,10 @@ class Student:
 
 
 class Lead:
-    def __init__(self, username, id, db):
+    def __init__(self, username, user_id, db):
         # Construct attribute for lead student
         self.__username = username
-        self.__id = id
+        self.__id = user_id
         self.__db = db
 
         # Get user project from table and set as an attribute
@@ -268,14 +268,14 @@ class Lead:
                     break
 
                 # Prompt user for ID
-                id = get_str("Enter student ID or type 0 to abort: ")
+                user_id = get_str("Enter student ID or type 0 to abort: ")
 
-                if id == '0':
+                if user_id == '0':
                     break
 
                 # Check is ID available
                 for person in login_table.table:
-                    if person['ID'] == id:
+                    if person['ID'] == user_id:
 
                         if person['role'] != 'student':
                             print("Invalid ID")
@@ -293,7 +293,7 @@ class Lead:
                                 {
                                     'lead': self.id,
                                     'project': self.project['name'],
-                                    'pending_member': id,
+                                    'pending_member': user_id,
                                     'status': "Pending"
                                 }
                             )
@@ -367,14 +367,14 @@ class Lead:
                     break
 
                 # Prompt user for ID
-                id = get_str("Enter faculty member ID or type 0 to abort: ")
+                user_id = get_str("Enter faculty member ID or type 0 to abort: ")
 
-                if id == '0':
+                if user_id == '0':
                     break
 
                 # Check is ID available
                 for person in login_table.table:
-                    if person['ID'] == id:
+                    if person['ID'] == user_id:
 
                         if person['role'] != 'faculty' and person['role'] != 'advisor':
                             print("Invalid ID")
@@ -393,7 +393,7 @@ class Lead:
                                 {
                                     'lead': self.id,
                                     'project': self.project['name'],
-                                    'pending_advisor': id,
+                                    'pending_advisor': user_id,
                                     'status': "Pending"
                                 }
                             )
@@ -403,24 +403,6 @@ class Lead:
                 if not invite_done:
                     print("Invalid ID")
                     wait_for_enter()
-
-    def __view_request_history(self):
-
-        # Prepare necessary table for further action
-        pending_approve_table = self.db.search("pending_approve.csv")
-
-        # Get pending request to check are their any ongoing request
-        my_request = pending_approve_table.filter(
-            lambda request:
-                request['lead'] == self.id,
-            new_name="Your request history")
-
-        if len(my_request.table) == 0:
-            print("You haven't sent any request")
-            wait_for_enter()
-        else:
-            my_request.print_table(new_line_key=["feedback"])
-            wait_for_enter()
 
     def __ap_request(self, re_type):
 
@@ -611,12 +593,12 @@ class Lead:
             wait_for_enter()
         return
 
-    def __view_proposal_approve_request(self):
+    def __view_proposal_approve_or_report_request(self, ap_type):
 
         my_request = self.db.search('pending_approve.csv').filter(
             lambda request:
-                request['lead'] == self.id and
-                request['type'] == 'proposal'
+                request['lead'] == self.project['lead'] and
+                request['type'] == ap_type
         )
 
         if len(my_request.table) != 0:
@@ -624,24 +606,7 @@ class Lead:
             wait_for_enter()
             return
         else:
-            print("You haven't sent proposal approve yet")
-
-    def __view_report_approve_request(self):
-
-        my_request = self.db.search('pending_approve.csv').filter(
-            lambda request:
-            request['lead'] == self.id and
-            request['type'] == 'report'
-        )
-
-        if len(my_request.table) != 0:
-            my_request.print_table(exclude_key=['type'], new_line_key=["feedback"])
-            wait_for_enter()
-            return
-        else:
-            print("You haven't sent report approve yet")
-            wait_for_enter()
-            return
+            print(f"You haven't sent {ap_type} approve yet")
 
     def __show_history(self):
 
@@ -659,11 +624,11 @@ class Lead:
             if choice == 1:
                 self.__view_invitation_status()
             if choice == 2:
-                self.__view_proposal_approve_request()
+                self.__view_proposal_approve_or_report_request('proposal')
             if choice == 3:
                 self.__eval_history()
             if choice == 4:
-                self.__view_report_approve_request()
+                self.__view_proposal_approve_or_report_request('report')
 
     def menu(self):
 
@@ -715,10 +680,10 @@ class Lead:
 
 
 class Member:
-    def __init__(self, username, id, db):
+    def __init__(self, username, user_id, db):
         # Construct attribute for lead student
         self.__username = username
-        self.__id = id
+        self.__id = user_id
         self.__db = db
 
         user_pro = db.search("project.csv").filter(lambda project: self.id in project["member"]).table[0]
@@ -857,10 +822,10 @@ class Member:
 
 
 class Faculty:
-    def __init__(self, username, id, db):
+    def __init__(self, username, user_id, db):
         # Construct attribute for faculty member
         self.__username = username
-        self.__id = id
+        self.__id = user_id
         self.__db = db
 
     def __view_advisor_request(self):
@@ -1061,10 +1026,10 @@ class Faculty:
 
 
 class Advisor:
-    def __init__(self, username, id, db):
+    def __init__(self, username, user_id, db):
         # Construct attribute for faculty member
         self.__username = username
-        self.__id = id
+        self.__id = user_id
         self.__db = db
 
         all_project = db.search('project.csv')
@@ -1422,3 +1387,40 @@ class Advisor:
     @property
     def advising(self):
         return self.__advising
+
+
+class Admin:
+    def __init__(self, username, user_id, db):
+        # Construct attribute for lead student
+        self.__username = username
+        self.__id = user_id
+        self.__db = db
+
+    def __view_and_insert_login_table(self):
+        login_table = self.db.search('login.csv')
+
+    def menu(self):
+        choice = print_get_choice(
+            [
+                'Login table',
+                'Pending member invitation table',
+                'Pending advisor invitation table',
+                'Pending approval table',
+                'Pending evaluate table',
+            ],
+            prompt="Which table you want to view and insert: "
+        )
+
+
+
+    @property
+    def id(self):
+        return self.__id
+
+    @property
+    def username(self):
+        return self.__username
+
+    @property
+    def db(self):
+        return self.__db
