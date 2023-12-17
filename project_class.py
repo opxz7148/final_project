@@ -258,6 +258,7 @@ class Lead:
                 lambda able_person:
                     able_person["role"] == "student"
             ).print_table(exclude_key=['password'])
+            wait_for_enter()
 
             # Let user input id of student that they want to invite
             invite_done = False
