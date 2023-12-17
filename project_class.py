@@ -356,7 +356,7 @@ class Lead:
             login_table.filter(
                 lambda able_person:
                     able_person["role"] == "faculty" or
-                    person["role"] == "advisor",
+                    able_person["role"] == "advisor",
                 new_name="Faculty member list").print_table(exclude_key=['password'])
 
             # Let user input id of student that they want to invite
@@ -432,6 +432,11 @@ class Lead:
 
             if self.project['status'] != 'Writing proposal':
                 print("You can't send proposal approve request at this time")
+                wait_for_enter()
+                return
+
+            if self.project['advisor'] == "none":
+                print("You must invite advisor before request an approval")
                 wait_for_enter()
                 return
 
@@ -905,8 +910,10 @@ class Faculty:
 
                 # Change status in pending member table
                 for invitation in pending_advisor_table.table:
-                    if invitation['pending_advisor'] == self.id and invitation['project'] == choose_project:
-                        invitation['status'] = "Accept"
+                    if invitation['pending_advisor'] == self.id and invitation['status'] == "Pending":
+                        invitation['status'] = "Decline"
+                        if invitation['project'] == choose_project:
+                            invitation['status'] = "Accept"
 
                 # Add member ID to project
                 for project in all_project.table:
@@ -1109,8 +1116,10 @@ class Advisor:
 
                 # Change status in pending member table
                 for invitation in pending_advisor_table.table:
-                    if invitation['pending_advisor'] == self.id and invitation['project'] == choose_project:
-                        invitation['status'] = "Accept"
+                    if invitation['pending_advisor'] == self.id and invitation['status'] == "Pending":
+                        invitation['status'] = "Decline"
+                        if invitation['project'] == choose_project:
+                            invitation['status'] = "Accept"
 
                 # Add member ID to project
                 for project in all_project.table:
@@ -1223,6 +1232,7 @@ class Advisor:
             return
 
         my_request.print_table(exclude_key="feedback")
+        wait_for_enter()
 
         # Get list of project name
         project_ls = [project['project'] for project in my_request.table]
@@ -1232,7 +1242,7 @@ class Advisor:
             choose_project = print_get_choice(
                 project_ls,
                 exit_choice="Cancel",
-                prompt=f"Choose a {re_type} to approve:"
+                prompt=f"Choose a {re_type} to approve: "
             )
 
             # If user choose to cancel return back to menu
