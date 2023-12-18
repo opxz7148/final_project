@@ -9,6 +9,9 @@ class Student:
         self.__db = db
 
     def __start_project(self):
+        """
+        Let student able to start a new project and change role to lead student.
+        """
         # Get information about project
         name = get_str("Project name: ")
         detail = get_str("Detail: ")
@@ -44,6 +47,9 @@ class Student:
         user.menu()
 
     def __accept_invite(self):
+        """
+        Show a pending project group invitation to user and let user decide to accept invitation or not.
+        """
 
         # Get necessary table for further action
         pending_member_table = self.db.search('pending_member.csv')
@@ -155,6 +161,10 @@ class Student:
             wait_for_enter()
 
     def menu(self):
+        """
+        Menu that will show an action that student able to do and let them to decide what to do.
+        :return:
+        """
         while True:
 
             choice = print_get_choice(['Start a project', 'Respond invitation'])
@@ -193,9 +203,18 @@ class Lead:
 
     def __print_project(self):
 
+        """
+        Simply print project in a easy to read format
+        """
+
         print_project(self.project, self.db)
 
     def __view_project(self):
+
+        """
+        Show project detail to user and let them decide to edit or do nothing.
+        :return:
+        """
 
         self.__print_project()
         wait_for_enter()
@@ -211,6 +230,10 @@ class Lead:
                 break
 
     def __edit_project(self, choice):
+        """
+        Edit project depend on user choice
+        :param choice: Key of dict that user want ot edit
+        """
         new = get_str("New information: ")
 
         if choice == 1:
@@ -226,6 +249,10 @@ class Lead:
         wait_for_enter()
 
     def __invite_member(self):
+
+        """
+        Show a list of student that able to send an invitation and let user sent an invitation to that student.
+        """
 
         if int(self.project["member_count"]) == 3:
             print("You've already reach maximum number of member")
@@ -305,6 +332,10 @@ class Lead:
                     wait_for_enter()
 
     def __view_invitation_status(self):
+        """
+        Show pending member table that correspond to this lead student.
+        :return:
+        """
 
         pending_member_table = self.db.search('pending_member.csv')
         my_invitation = pending_member_table.filter(lambda invitation: invitation['lead'] == self.project['lead'])
@@ -324,6 +355,9 @@ class Lead:
             wait_for_enter()
 
     def __invite_advisor(self):
+        """
+        Show list of faculty and advisor that able to advise a group and sent invitation to them.
+        """
 
         if self.project["advisor"] != "none":
             print("You already have advisor")
@@ -405,6 +439,10 @@ class Lead:
                     wait_for_enter()
 
     def __ap_request(self, re_type):
+        """
+        Sent a proposal or report approve request to advisor depend on re_type param.
+        :param re_type: proposal or report
+        """
 
         # Prepare necessary table for further action
         pending_approve_table = self.db.search("pending_approve.csv")
@@ -475,6 +513,9 @@ class Lead:
             wait_for_enter()
 
     def __eval_request(self):
+        """
+        Sent evaluate request to choose faculty member.
+        """
 
         pending_eval = self.db.search('pending_eval.csv')
 
@@ -580,6 +621,9 @@ class Lead:
                 wait_for_enter()
 
     def __eval_history(self):
+        """
+        Show past and pending evaluation.
+        """
 
         pending_eval = self.db.search('pending_eval.csv')
 
@@ -594,6 +638,10 @@ class Lead:
         return
 
     def __view_proposal_approve_or_report_request(self, ap_type):
+        """
+        Show past report or proposal approve request depend of ap_type param.
+        :param ap_type: report of proposal
+        """
 
         my_request = self.db.search('pending_approve.csv').filter(
             lambda request:
@@ -631,6 +679,10 @@ class Lead:
                 self.__view_proposal_approve_or_report_request('report')
 
     def menu(self):
+        """
+        Show a list of action that lead student can perform.
+        :return:
+        """
 
         while True:
 

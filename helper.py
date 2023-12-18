@@ -2,11 +2,14 @@ import csv
 
 
 def login(db):
-
+    """
+    Let user input username and their password and check is it correct if so return a list of user information as a list
+    :param db: Database class instance
+    :return: List of user information
+    """
     while True:
         # ask a user for a username and password
         username = input("Username: ")
-
         # Check that username and password are exist or not.
         login_table = db.search("login.csv").table
         for user in login_table:
@@ -24,6 +27,13 @@ def login(db):
 
 
 def write_csv(filename, listofhead, listofdict):
+    """
+    Write list of dict into csv file.
+    :param filename: Filename of file that you want to write to.
+    :param listofhead: List of dict keys
+    :param listofdict: List of dict
+    :return:
+    """
 
     # Open file correspond to file name param.
     file = open(filename, 'w')
@@ -40,6 +50,10 @@ def write_csv(filename, listofhead, listofdict):
 
 
 def record_change(db1):
+    """
+    Use write csv function to record updated data into csv file.
+    :param db1: Database class instance
+    """
 
     # Write each table back to csv file to update new information for each session.
     write_csv(
@@ -80,6 +94,14 @@ def record_change(db1):
 
 
 def get_int(msg, start=0, stop=10000):
+    """
+    Prompt user a number in range from start to stop number. If user type something out of range of wrong type this
+    function will keep prompting until get a valid input
+    :param msg: Message that will prompt user.
+    :param start: First range of answer
+    :param stop: Last number in range
+    :return: Integer of number in range start to stop.
+    """
     in_range = list(range(start, stop+1))
     while True:
         result = input(msg)
@@ -94,7 +116,11 @@ def get_int(msg, start=0, stop=10000):
 
 
 def get_str(msg):
-
+    """
+    Prompt user a string
+    :param msg:
+    :return:
+    """
     while True:
         result = input(msg)
         if result.strip() == "":
