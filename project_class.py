@@ -1,5 +1,5 @@
-from helper import get_str, print_get_choice, wait_for_enter, record_change, print_project
 import sys
+from helper import get_str, print_get_choice, wait_for_enter, record_change, print_project
 
 
 class Student:
@@ -638,8 +638,8 @@ class Lead:
                 'View project',
                 'Invite member',
                 'Invite Advisor',
-                'Proposal Approve request',
-                'Report approve request',
+                'Proposal approval request',
+                'Report approval request',
                 'Evaluate request',
                 'View history'
             ])
@@ -1002,7 +1002,7 @@ class Faculty:
     def menu(self):
         while True:
 
-            choice = print_get_choice(['Respond advisor request', 'Evaluate Project'])
+            choice = print_get_choice(['Response advisor request', 'Evaluate Project'])
 
             if choice == 0:
                 break
@@ -1397,7 +1397,8 @@ class Admin:
         self.__db = db
 
     def __insert_table(self, table):
-        print("Input data for each collumn")
+
+        print("Input data for each column")
         keys = list(table.table[0].keys())
         temp = {}
         for key in keys:

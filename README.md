@@ -1,3 +1,5 @@
+# Note : If my program broken for any reason please run file in commit `45b0f44f1e0dab567aac80e500efd055cd119cb5` _Make a final test_ instead of lastest commit.
+
 # Final project for 2023's 219114/115 Programming I
 * Starting files for part 1
   - database.py
@@ -54,9 +56,11 @@
 |         | Sent proposal approval request to advisor.                                                                                 | `def __ap_request(self, re_type):`             | Lead    |         100%          |
 |         | Sent report approval request to advisor.                                                                                   | `def __ap_request(self, re_type):`             | Lead    |         100%          |
 |         | Send evaluate request to faculty member and other advisor.                                                                 | `def __eval_request(self):`                    | Lead    |         100%          |
-|         | View history and status for each action                                                                                    | `def __show_history(self):`                    | Lead    |         100%          |
-| Member  | View and edit project.                                                                                                     | `def __view_project(self):`                    | Lead    |         100%          |
 |         | View history and status for each action.                                                                                   | `def __show_history(self):`                    | Lead    |         100%          |
+|         | Approve member leaving request.                                                                                            | -                                              | -       |          0%           |
+| Member  | View and edit project.                                                                                                     | `def __view_project(self):`                    | Member  |         100%          |
+|         | View history and status for each action.                                                                                   | `def __show_history(self):`                    | Member  |         100%          |
+|         | Leave project                                                                                                              | -                                              | Member  |          0%           |
 | Faculty | View and decide to accept or deny advisor request.                                                                         | `def __view_advisor_request(self): `           | Faculty |         100%          |
 |         | View a evaluate request from lead student and choose to approve or not.                                                    | `def __eval(self):`                            | Faculty |         100%          |
 | Advisor | View and decide to accept or deny advisor request.                                                                         | `def __view_advisor_request(self): `           | Advisor |         100%          |
@@ -64,5 +68,12 @@
 |         | View a project that they're currently advising and edit some detail in project.                                            | `def __view_advising_project(self):`           | Advisor |         100%          |
 |         | View proposal and report than decide to approve or not                                                                     | `def __approve_project(self, re_type):`        | Advisor |         100%          |
 |  Admin  | View and insert new row of information in every csv file                                                                   | `def __view_and_insert_table(self, filename):` | Admin   |         100%          |
-|         | Edit information in certain row                                                                                            | -                                              |         |          0%           |
+|         | Edit information in certain row                                                                                            | -                                              | -       |          0%           |
 
+# Missing feature
+  - #### Let member able to leave group than lead can approve or unapprove leave request.
+  - #### Let admin able to change certain row in CSV file
+
+# Outstanding bug
+  - #### After a several time of testing I haven't found any vital bug that will broke the program down.
+  - #### The only bug I found is when use _wait_for_enter()_ function is sometime user need to press enter for 2 times to continue to next process.

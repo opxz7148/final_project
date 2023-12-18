@@ -2,11 +2,11 @@
 
 ## ***Overall step***
   ~~- Lead student create a project~~
-  - Invite member and advisor
-  - Sent proposal to let advisor approve
-  - Make project report
-  - Invite committee to evaluate project
-  - Sent report to advisor to get a approval
+  ~~- Invite member and advisor~~
+  ~~- Sent proposal to let advisor approve~~
+  ~~- Make project report~~
+  ~~- Invite committee to evaluate project~~
+  ~~- Sent report to advisor to get a approval~~
 
 ## **General** 
   ~~- Implement project table class to store information for each project.~~
@@ -38,10 +38,10 @@
         - Project name
       * *Method*
         ~~- Sent invitation to other student to join their group which. They can have only one pending invitation at the same time. Student who got invited must responded before lead student invite another student. In their group they're allowed to have at most 3 member which is 1 lead and 2 member.~~
-        - Sent invitation to faculty member to be their advisor.
+        ~~- Sent invitation to faculty member to be their advisor.~~
         ~~- See and modified their own project.~~
-        - Submit project proposal to let their advisor approve.
-        - Submit their project report to let faculty member evaluate.
+        ~~- Submit project proposal to let their advisor approve.~~
+        ~~- Submit their project report to let faculty member evaluate.~~
         - Approve member leave request.
 
   - ### ***Member***
@@ -51,36 +51,35 @@
         - User's ID
         - Project name
       * *Method*
-        - View and modified their project.
+        ~~- View and modified their project.~~
         - Leave group
 
   - ### ***Faculty member***
-    - Implement member class to store action that faculty member can perform. In faculty member class will contain the following
-      * *Attribute*
+    ~~- Implement member class to store action that faculty member can perform. In faculty member class will contain the following~~
+      ~~* *Attribute*~~
         - Username
         - User's ID
       * *Method*
-        - View and respond advisor request. One faculty member may have multiple advisee
-        - Evaluate project report and choose to approve or feedback project.
+        ~~- View and respond advisor request. One faculty member may have multiple advisee~~
+        ~~- Evaluate project report and choose to approve or feedback project.~~
         
   - ### ***Advisor***
-    - Implement Advisor class to store action that Advisor can perform. In Advisor class will contain the following
-        * *Attribute*
+    ~~- Implement Advisor class to store action that Advisor can perform. In Advisor class will contain the following~~
+        ~~* *Attribute*~~
           - Username
           - User's ID
           - Advisee project
         * *Method*
-          - View and modified their advisee project.
-          - View a proposal approve request from their advisee and choose to approve or feedback
-          - Evaluate project report and choose to approve or feedback project.
+          ~~- View and modified their advisee project.~~
+          ~~- View a proposal approve request from their advisee and choose to approve or feedback~~
+          ~~- Evaluate project report and choose to approve or feedback project.~~
 
   - ### ***Admin***
-    - Implement Advisor class to store action that Advisor can perform. In Advisor class will contain the following
-        * *Attribute*
+    ~~- Implement Advisor class to store action that Advisor can perform. In Advisor class will contain the following~~
+        ~~* *Attribute*~~
           - Username
           - User's ID
           - Advisee project
         * *Method*
-          - View and modified their advisee project.
-          - View a proposal approve request from their advisee and choose to approve or feedback
-          - Evaluate project report and choose to approve or feedback project.
+          ~~- Able to view and insert every table~~
+          - Update row in a table 
