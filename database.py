@@ -152,16 +152,14 @@ class Table:
         table_size = (column_size * len(key_ls) + len(key_ls) + 1)
         print("-" * table_size)
 
-        print(f"| {'Table name : ' + self.table_name:^30}", end="")
-        print(" " * (table_size - len('| Table name:' + self.table_name) - 3), end="")
-        print("|")
+        print(f"|{'Table name : ' + self.table_name:^{table_size-2}}|",)
 
         print("-" * table_size)
 
         print("|", end="")
 
         for key in key_ls:
-            print(f"{key:^30}", end="|")
+            print(f"{key:^{column_size}}", end="|")
         print()
 
         for item in self.table:
@@ -169,15 +167,12 @@ class Table:
             print("-" * table_size)
             print("|", end="")
             for key in key_ls:
-                print(f"{item[key]:^30}", end="|")
+                print(f"{item[key]:^{column_size}}", end="|")
             print("")
 
             for new_line in new_line_key:
                 print("-" * table_size)
-                print(f"| {new_line}: {item[new_line]}", end="")
-                print(" " * (table_size - len(new_line) - len(item[new_line]) - 5), end="")
-                print("|")
-
+                print(f"|{new_line + ':' + item[new_line]:<{table_size-2}}|", end="")
 
         print("-" * table_size)
 

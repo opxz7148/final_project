@@ -6,6 +6,7 @@ from project_class import Student, Lead, Member, Faculty, Advisor, Admin
 # Initialize database for collect information
 db1 = Database("db1")
 
+
 def initializing():
 
     # Add all necessary table from csv file
@@ -17,14 +18,25 @@ def initializing():
     db1.add_csv_table("pending_approve.csv")
     db1.add_csv_table("pending_eval.csv")
 
+
 # make calls to the initializing and login functions defined above
 initializing()
 
+line_len = len('=====================================================')
+
+print("\n=====================================================")
+print(f"|{'Welcome to senior project manager.':^{line_len-2}}|")
+print(f"|{'Please login with your username and password.':^{line_len-2}}|")
+print("=====================================================\n")
+
 val = login(db1)
 
-print("\n=====================================================\n")
-print(f"Welcome {get_name(val[1], db1)} ID: {val[1]} Role: {val[2].title()}")
 print("\n=====================================================")
+print(f"|{'Welcome ' + get_name(val[1], db1):^{line_len-2}}|")
+print(f"|{'ID: ' + val[1]:^{line_len-2}}|")
+print(f"|{'Role: ' + val[2].title():^{line_len-2}}|")
+print("=====================================================")
+
 wait_for_enter()
 
 # based on the return value for login, activate the code that performs activities according to the role defined for that person_id
